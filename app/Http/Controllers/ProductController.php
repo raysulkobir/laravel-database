@@ -91,12 +91,41 @@ class ProductController extends Controller
         // $products = DB::table('products')->distinct()->limit(2)->get();
 
         // Raw Expressions
+        // if(DB::table('orders')->where('id', 1)->exists()) {
+        //     return 'Order exists';
+        // }
+
+        // Select Statements
+
+        // $query = DB::table('users')->select('name');
+        // $query->addSelect('id');
+        // $query->limit(10);
+        // echo $query->get();
+
+
+        // Raw Expressions
+        // $products = DB::table('products')->select('id', 'name')
+        // ->where('id', '>', 1)
+        // ->where('id', '<', 50)
+        // ->where('published', 1)
+        // ->get();
+
+        // Raw Methods
+        $products = Product::selectRaw('id, name, unit_price as price')
+        ->whereRaw('id > ?', [1])
+        ->whereRaw('id < ?', [50])
+        ->whereRaw('published = ?', [1])
+        ->whereRaw('unit_price > IF(unit_price < 169900)')
+        ->get();
+
 
 
         return $products;
 
 
-        return view('products.index', ['products' => $products]);
+
+
+        // return view('products.index', ['products' => $products]);
     }
 
     /**
