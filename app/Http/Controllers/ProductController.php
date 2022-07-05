@@ -111,15 +111,25 @@ class ProductController extends Controller
         // ->get();
 
         // Raw Methods
-        $products = Product::selectRaw('id, name, unit_price as price')
-        ->whereRaw('id > ?', [1])
-        ->whereRaw('id < ?', [50])
-        ->whereRaw('published = ?', [1])
-        ->whereRaw('unit_price > IF(unit_price < 169900)')
-        ->get();
+        // $products = Product::selectRaw('id, name, unit_price as price')
+        // ->whereRaw('id > ?', [1])
+        // ->whereRaw('id < ?', [50])
+        // ->whereRaw('published = ?', [1])
+        // ->get();
 
 
+        // $products = DB::table('products')
+        //         ->selectRaw('unit_price * ? as price_with_tax', [1.0825])
+        //         ->get();
 
+
+        // havingRaw / orHavingRaw
+
+        $products = DB::table('products')
+                ->select('id', 'name', 'unit_price as price')
+                // ->groupBy('category_id')
+                ->havingRaw('SUM(price))
+                ->get();
         return $products;
 
 
